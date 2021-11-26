@@ -15,10 +15,10 @@ const Card = props => {
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.bio}>{bio}</Text>
           <Image
-              source={Like}
-              style={[styles.like, {left: 10}]}
-              resizeMode="contain"
-            />
+            source={Like}
+            style={[styles.like, {left: 10}]}
+            resizeMode="contain"
+          />
         </View>
       </ImageBackground>
     </View>
