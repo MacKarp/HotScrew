@@ -21,8 +21,9 @@ jobs:
           npm install
       - name: Build Android Release
         run: |
-          cd HotScrew
-          cd android && ./gradlew assembleRelease --no-daemon    
+          cd HotScrew/android
+          chmod +x ./gradlew
+          ./gradlew assembleRelease --no-daemon    
       - name: Sign App Bundle
         id: sign_app
         uses: r0adkll/sign-android-release@v1
