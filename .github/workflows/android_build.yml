@@ -48,7 +48,7 @@ jobs:
           cd HotScrew/android/app/build/outputs/apk/release/
           mv app-release-signed.apk HotScrew.apk
       - name: Create Release
-        id: nightly-snapshot
+        id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
