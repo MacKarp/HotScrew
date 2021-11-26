@@ -1,14 +1,8 @@
 name: react-native-android-build-apk
-on:
-  push:
-    branches:
-      - master
-
 on: workflow_dispatch
 
 jobs:
   build-android:
-    needs: install-and-test
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
@@ -22,14 +16,13 @@ jobs:
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:
-        releaseDirectory: HotScrew/HotScrew/android/app/build/outputs/bundle/release
-        signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-        alias: ${{ secrets.ANDROID_SIGNING_ALIAS }}
-        keyStorePassword: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
-        keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}    
+         releaseDirectory: HotScrew/HotScrew/android/app/build/outputs/bundle/release
+         signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+         alias: ${{ secrets.ANDROID_SIGNING_ALIAS }}
+         keyStorePassword: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
+         keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}    
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-        name: Signed App Bundle
-        path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
+         name: Signed App Bundle
+         path: ${{steps.sign_app.outputs.signedReleaseFile}}
