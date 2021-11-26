@@ -8,7 +8,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
-          npm install debug
+          apt update && apt install ls ll
+          ls
+          npm install
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
