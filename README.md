@@ -1,6 +1,6 @@
 <p align="center"><img src="img/logo.png"></p>
 
-# Informations
+# Information's [![Android build](https://github.com/MacKarp/HotScrew/actions/workflows/android_build.yml/badge.svg)](https://github.com/MacKarp/HotScrew/actions/workflows/android_build.yml)
 
 HotScrew is dating app for robots!
 
