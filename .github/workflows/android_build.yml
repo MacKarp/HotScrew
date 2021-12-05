@@ -29,7 +29,6 @@ jobs:
           npm install
           npm install -g @aws-amplify/cli
           amplify aws_cli_auto_prompt=on-partial configure
-          amplify aws_cli_auto_prompt=on-partial pull --yes
       - name: Build Android Release
         run: |
           cd HotScrew/android
