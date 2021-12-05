@@ -24,12 +24,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws_cli_auto_prompt: on-partial
         run: |
           cd HotScrew
           npm install
           npm install -g @aws-amplify/cli
-          amplify configure
-          
+          amplify --no-cli-auto-prompt configure
+          amplify --no-cli-auto-prompt pull --appId ${{ secrets.AWS_APP_ID }} --envName staging        
       - name: Build Android Release
         run: |
           cd HotScrew/android
