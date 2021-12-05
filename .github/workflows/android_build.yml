@@ -29,7 +29,7 @@ jobs:
           npm install
           npm install -g @aws-amplify/cli
           amplify aws_cli_auto_prompt=on-partial configure
-          amplify aws_cli_auto_prompt=on-partial pull --appId d3m4jte6nvg2hq --envName staging
+          echo ${{ secret.AWS_EXPORTS }} >> ./src/aws-exports.js
       - name: Build Android Release
         run: |
           cd HotScrew/android
