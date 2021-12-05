@@ -1,13 +1,21 @@
 import 'react-native-gesture-handler';
 import React, {useState} from 'react';
 import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
+
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import Amplify from 'aws-amplify';
+import {withAuthenticator} from 'aws-amplify-react-native';
+import config from './src/aws-exports';
+
 import HomeScreen from './src/screens/Home_Screen';
 import MatchesScreen from './src/screens/Matches_Screen';
+import ProfileOptionScreen from './src/screens/ProfileOption_Screen';
+
+Amplify.configure(config);
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
@@ -37,10 +45,13 @@ const App = () => {
               color={activeScreen === 'CHAT' ? activeColor : color}
             />
           </Pressable>
-          <FontAwesome5 name="robot" size={40} color={color} />
+          <Pressable onPress={() => setActiveScreen('OPTIONS')}>
+            <FontAwesome5 name="robot" size={40} color={color} />
+          </Pressable>
         </View>
         {activeScreen === 'HOME' && <HomeScreen />}
         {activeScreen === 'CHAT' && <MatchesScreen />}
+        {activeScreen === 'OPTIONS' && <ProfileOptionScreen />}
       </View>
     </SafeAreaView>
   );
@@ -66,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withAuthenticator(App);

@@ -1,0 +1,15 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hotscrew-staging-120711-authRole",
+      "UnauthRoleArn": "arn:aws:iam::169078100124:role/amplify-hotscrew-staging-120711-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::169078100124:role/amplify-hotscrew-staging-120711-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-hotscrew-staging-120711-deployment",
+      "UnauthRoleName": "amplify-hotscrew-staging-120711-unauthRole",
+      "StackName": "amplify-hotscrew-staging-120711",
+      "StackId": "arn:aws:cloudformation:eu-central-1:169078100124:stack/amplify-hotscrew-staging-120711/e0f6ff30-55c3-11ec-80bb-02841248df78",
+      "AmplifyAppId": "d3m4jte6nvg2hq"
+    }
+  }
+}
