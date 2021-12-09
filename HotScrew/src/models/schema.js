@@ -10,32 +10,53 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "User1": {
-                    "name": "User1",
+                "User1ID": {
+                    "name": "User1ID",
                     "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "User2ID": {
+                    "name": "User2ID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "isMatch": {
+                    "name": "isMatch",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Users1": {
+                    "name": "Users1",
+                    "isArray": true,
                     "type": {
                         "model": "User"
                     },
                     "isRequired": false,
                     "attributes": [],
+                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "matchUser1Id"
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "matchID"
                     }
                 },
-                "User2": {
-                    "name": "User2",
-                    "isArray": false,
+                "Users2": {
+                    "name": "Users2",
+                    "isArray": true,
                     "type": {
                         "model": "User"
                     },
                     "isRequired": false,
                     "attributes": [],
+                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "matchUser2Id"
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "matchID"
                     }
                 },
                 "createdAt": {
@@ -53,20 +74,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "matchUser1Id": {
-                    "name": "matchUser1Id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "matchUser2Id": {
-                    "name": "matchUser2Id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -108,6 +115,13 @@ export const schema = {
                     "name": "name",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "bio": {
+                    "name": "bio",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -118,11 +132,18 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "bio": {
-                    "name": "bio",
+                "sub": {
+                    "name": "sub",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
+                    "attributes": []
+                },
+                "matchID": {
+                    "name": "matchID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -150,6 +171,15 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byMatch",
+                        "fields": [
+                            "matchID"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -170,5 +200,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "533f740fb3526e740416abe8d7827f16"
+    "version": "e190335850338440820d22e8b6d0b52b"
 };

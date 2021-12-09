@@ -15,7 +15,12 @@ import HomeScreen from './src/screens/Home_Screen';
 import MatchesScreen from './src/screens/Matches_Screen';
 import ProfileOptionScreen from './src/screens/ProfileOption_Screen';
 
-Amplify.configure(config);
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
@@ -46,7 +51,11 @@ const App = () => {
             />
           </Pressable>
           <Pressable onPress={() => setActiveScreen('OPTIONS')}>
-            <FontAwesome5 name="robot" size={40} color={color} />
+            <FontAwesome5
+              name="robot"
+              size={40}
+              color={activeScreen === 'OPTIONS' ? activeColor : color}
+            />
           </Pressable>
         </View>
         {activeScreen === 'HOME' && <HomeScreen />}
