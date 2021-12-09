@@ -1,12 +1,18 @@
 type Match @model @auth(rules: [{allow: public}]) {
   id: ID!
-  User1: User @hasOne
-  User2: User @hasOne
+  User1ID: String!
+  User2ID: String
+  isMatch: Boolean!
+  Users1: [User] @hasMany(indexName: "byMatch", fields: ["id"])
+  Users2: [User] @hasMany(indexName: "byMatch", fields: ["id"])
 }
 
 type User @model @auth(rules: [{allow: public}]) {
   id: ID!
-  name: String!
-  image: String
+  name: String
   bio: String!
+  image: String
+  sub: String!
+  matchID: ID @index(name: "byMatch")
 }
+ 
