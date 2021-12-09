@@ -2,7 +2,7 @@ version: 0.1
 phases:
   build:
     commands:
-      - cd android && chmod +x ./gradlew && ./gradlew assembleRelease
+      - cd HotScrew/android && chmod +x ./gradlew && ./gradlew assembleRelease
 artifacts:
   files:
     - HotScrew/android/app/build/outputs/apk/release/
