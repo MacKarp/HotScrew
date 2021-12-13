@@ -31,6 +31,7 @@ jobs:
           amplify aws_cli_auto_prompt=on-partial configure
           touch src/aws-exports.js
           cat "${{ secrets.AWS_EXPORTS }}" > src/aws-exports.js
+          amplify push
       - name: Build Android Release
         run: |
           cd HotScrew/android
