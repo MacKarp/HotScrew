@@ -1,3 +1,11 @@
+enum Type {
+  ANDROID
+  CYBORG
+  DROID
+  HIVEMIND
+  OTHER
+}
+
 type Match @model @auth(rules: [{allow: public}]) {
   id: ID!
   User1ID: String!
@@ -14,5 +22,7 @@ type User @model @auth(rules: [{allow: public}]) {
   image: String
   sub: String!
   matchID: ID @index(name: "byMatch")
+  type: Type
+  lookingFor: Type
 }
  

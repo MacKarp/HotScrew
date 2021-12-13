@@ -59,5 +59,12 @@
         }
       }
     }
+  },
+  "storage": {
+    "s3hotscrewstoraged3m4jte6nvg2hq": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }

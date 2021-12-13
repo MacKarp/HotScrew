@@ -1,24 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, ImageBackground, View, StyleSheet, Image} from 'react-native';
-import Like from '../../../assets/images/screw.png';
+import Screw from '../../../assets/images/screw.png';
+import {Storage} from 'aws-amplify';
 
 const Card = props => {
   const {name, image, bio} = props.user;
+  const [imageUrl, setImageUrl] = useState(image);
+
+  useEffect(() => {
+    if (!image?.startsWith('http')) {
+      Storage.get(image).then(setImageUrl);
+    }
+  }, [image]);
+
   return (
     <View style={styles.card}>
       <ImageBackground
         source={{
-          uri: image,
+          uri: imageUrl,
         }}
         style={styles.image}>
         <View style={styles.cardInner}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.bio}>{bio}</Text>
-          <Image
-            source={Like}
-            style={[styles.like, {left: 10}]}
-            resizeMode="contain"
-          />
+          <Image source={Screw} style={styles.like} resizeMode="contain" />
         </View>
       </ImageBackground>
     </View>
@@ -39,6 +44,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 6,
+    elevation: 11,
   },
 
   image: {
@@ -54,13 +60,13 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'normal',
-    fontSize: 14,
+    fontSize: 30,
     color: 'white',
   },
   bio: {
-    fontSize: 12,
+    fontSize: 20,
     color: 'white',
-    lineHeight: 14,
+    lineHeight: 25,
   },
 
   like: {

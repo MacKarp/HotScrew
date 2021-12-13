@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Pressable} from 'react-native';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -9,37 +9,64 @@ import {DataStore, Auth} from 'aws-amplify';
 import {User, Match} from '../models';
 
 import Card from '../components/Profile_Card';
-
 import AnimatedStack from '../components/Animated_Stack';
 
-const HomeScreen = () => {
+const HomeScreen = ({isUserLoading}) => {
+  const [me, setMe] = useState(null);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-  const [me, setMe] = useState(null);
+  const [matchesIds, setMatchesIds] = useState(null);
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const user = await Auth.currentAuthenticatedUser();
 
-      const dbUsers = await DataStore.query(
-        User,
-        u => u.sub === user.attributes.sub,
+      const dbUsers = await DataStore.query(User, u =>
+        u.sub('eq', user.attributes.sub),
       );
-      if (dbUsers.length < 0) {
+      if (!dbUsers || dbUsers.length === 0) {
         return;
       }
       setMe(dbUsers[0]);
     };
     getCurrentUser();
-  }, []);
+  }, [isUserLoading]);
 
   useEffect(() => {
+    if (!me) {
+      return;
+    }
+    const fetchMatches = async () => {
+      const result = await DataStore.query(Match, m =>
+        m
+          .isMatch('eq', true)
+          .or(m1 => m1.User1ID('eq', me.id).User2ID('eq', me.id)),
+      );
+      setMatchesIds(
+        result.map(match =>
+          match.User1ID === me.id ? match.User2ID : match.User1ID,
+        ),
+      );
+    };
+    fetchMatches();
+  }, [me]);
+
+  useEffect(() => {
+    if (isUserLoading || !me || matchesIds === null) {
+      return;
+    }
     const fetchUsers = async () => {
-      const fetchedUsers = await DataStore.query(User);
+      let fetchedUsers = await DataStore.query(User, user =>
+        user.type('eq', me.lookingFor),
+      );
+
+      fetchedUsers = fetchedUsers.filter(u => !matchesIds.includes(u.id));
+
       setUsers(fetchedUsers);
     };
     fetchUsers();
-  }, []);
+  }, [isUserLoading, me, matchesIds]);
+
   const onSwipeLeft = () => {
     if (!currentUser || !me) {
       return;
@@ -65,13 +92,7 @@ const HomeScreen = () => {
       match.User1ID('eq', currentUser.id).User2ID('eq', me.id),
     );
 
-    console.log('hisMatches');
-    console.log('User1 ', currentUser.id);
-    console.log('User2 ', me.id);
-    console.log(hisMatches);
-
     if (hisMatches.length > 0) {
-      console.log('Yay, this is a new match');
       const hisMatch = hisMatches[0];
       DataStore.save(
         Match.copyOf(hisMatch, updated => (updated.isMatch = true)),
@@ -101,9 +122,7 @@ const HomeScreen = () => {
       <View style={styles.bottomNavigationBar}>
         <FontAwesome name="undo" size={40} color="#eecf00" />
         <Entypo name="cross" size={50} color="#c30000" />
-        <Entypo name="star" size={40} color="#3caecb" />
         <Entypo name="heart" size={40} color="#6dc900" />
-        <Ionicons name="flash" size={40} color="#a200ff" />
       </View>
     </View>
   );

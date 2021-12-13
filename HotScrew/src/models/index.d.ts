@@ -1,6 +1,12 @@
 import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
 
-
+export enum Type {
+  ANDROID = "ANDROID",
+  CYBORG = "CYBORG",
+  DROID = "DROID",
+  HIVEMIND = "HIVEMIND",
+  OTHER = "OTHER"
+}
 
 
 
@@ -32,6 +38,8 @@ export declare class User {
   readonly image?: string;
   readonly sub: string;
   readonly matchID?: string;
+  readonly type?: Type | keyof typeof Type;
+  readonly lookingFor?: Type | keyof typeof Type;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);
