@@ -29,7 +29,7 @@ jobs:
           npm install
           npm install -g @aws-amplify/cli
           amplify aws_cli_auto_prompt=on-partial configure
-          amplify aws_cli_auto_prompt=on-partial wait init --yes
+          amplify aws_cli_auto_prompt=on-partial init --yes
           amplify env checkout staging
       - name: Build Android Release
         run: |
