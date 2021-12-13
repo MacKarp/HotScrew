@@ -1,13 +1,19 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
-import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import Amplify from 'aws-amplify';
+import Amplify, {Hub} from 'aws-amplify';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import config from './src/aws-exports';
 
@@ -24,9 +30,40 @@ Amplify.configure({
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
   const activeColor = '#f18c15';
   const color = '#5dbcd2';
+
+  useEffect(() => {
+    const listener = Hub.listen('datastore', async hubData => {
+      const {event, data} = hubData.payload;
+      if (event === 'modelSynced' && data?.model?.name === 'User') {
+        console.log('User Model has finished syncing');
+        setIsUserLoading(false);
+      }
+    });
+
+    return () => listener();
+  }, []);
+
+  const renderPage = () => {
+    if (activeScreen === 'HOME') {
+      return <HomeScreen isUserLoading={isUserLoading} />;
+    }
+
+    if (isUserLoading) {
+      return <ActivityIndicator style={{flex: 1}} />;
+    }
+
+    if (activeScreen === 'CHAT') {
+      return <MatchesScreen />;
+    }
+    if (activeScreen === 'OPTIONS') {
+      return <ProfileOptionScreen />;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.pageContainer}>
@@ -58,9 +95,7 @@ const App = () => {
             />
           </Pressable>
         </View>
-        {activeScreen === 'HOME' && <HomeScreen />}
-        {activeScreen === 'CHAT' && <MatchesScreen />}
-        {activeScreen === 'OPTIONS' && <ProfileOptionScreen />}
+        {renderPage()}
       </View>
     </SafeAreaView>
   );

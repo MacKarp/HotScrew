@@ -1,0 +1,11 @@
+{
+  "resourceName": "s3hotscrewstoraged3m4jte6nvg2hq",
+  "bucketName": "hotscrew-storage-d3m4jte6nvg2hq",
+  "policyUUID": "74dd76ac",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ]
+}
