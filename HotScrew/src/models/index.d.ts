@@ -23,8 +23,8 @@ export declare class Match {
   readonly User1ID: string;
   readonly User2ID?: string;
   readonly isMatch: boolean;
-  readonly Users1?: (User | null)[];
-  readonly Users2?: (User | null)[];
+  readonly User1?: User;
+  readonly User2?: User;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Match, MatchMetaData>);
@@ -37,7 +37,6 @@ export declare class User {
   readonly bio: string;
   readonly image?: string;
   readonly sub: string;
-  readonly matchID?: string;
   readonly type?: Type | keyof typeof Type;
   readonly lookingFor?: Type | keyof typeof Type;
   readonly createdAt?: string;

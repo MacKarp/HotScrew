@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, SafeAreaView, Image} from 'react-native';
 import {DataStore, Auth} from 'aws-amplify';
 import {Match, User} from '../models';
 
-const MatchesScreen = () => {
+const LikingMeScreen = () => {
   const [matches, setMatches] = useState([]);
   const [me, setMe] = useState(null);
 
@@ -27,9 +27,7 @@ const MatchesScreen = () => {
     }
     const fetchMatches = async () => {
       const result = await DataStore.query(Match, m =>
-        m
-          .isMatch('eq', true)
-          .or(m1 => m1.User1ID('eq', me.id).User2ID('eq', me.id)),
+        m.isMatch('eq', false).User2ID('eq', me.id),
       );
       setMatches(result);
     };
@@ -54,7 +52,7 @@ const MatchesScreen = () => {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.container}>
-        <Text style={styles.matchText}>Pasujące profile</Text>
+        <Text style={styles.matchText}>Lubią Cię</Text>
         <View style={styles.users}>
           {matches.map(match => {
             const matchUser =
@@ -128,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MatchesScreen;
+export default LikingMeScreen;

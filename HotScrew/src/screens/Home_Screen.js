@@ -106,7 +106,6 @@ const HomeScreen = ({isUserLoading}) => {
       User2ID: currentUser.id,
       isMatch: false,
     });
-    console.log(newMatch);
     DataStore.save(newMatch);
   };
 

@@ -20,6 +20,7 @@ import config from './src/aws-exports';
 import HomeScreen from './src/screens/Home_Screen';
 import MatchesScreen from './src/screens/Matches_Screen';
 import ProfileOptionScreen from './src/screens/ProfileOption_Screen';
+import LikingMeScreen from './src/screens/Liking_Me_Screen';
 
 Amplify.configure({
   ...config,
@@ -39,7 +40,6 @@ const App = () => {
     const listener = Hub.listen('datastore', async hubData => {
       const {event, data} = hubData.payload;
       if (event === 'modelSynced' && data?.model?.name === 'User') {
-        console.log('User Model has finished syncing');
         setIsUserLoading(false);
       }
     });
@@ -55,7 +55,9 @@ const App = () => {
     if (isUserLoading) {
       return <ActivityIndicator style={{flex: 1}} />;
     }
-
+    if (activeScreen === 'LIKING_ME') {
+      return <LikingMeScreen />;
+    }
     if (activeScreen === 'CHAT') {
       return <MatchesScreen />;
     }
@@ -75,11 +77,13 @@ const App = () => {
               color={activeScreen === 'HOME' ? activeColor : color}
             />
           </Pressable>
-          <MaterialCommunityIcons
-            name="star-four-points"
-            size={40}
-            color={color}
-          />
+          <Pressable onPress={() => setActiveScreen('LIKING_ME')}>
+            <MaterialCommunityIcons
+              name="star-four-points"
+              size={40}
+              color={activeScreen === 'LIKING_ME' ? activeColor : color}
+            />
+          </Pressable>
           <Pressable onPress={() => setActiveScreen('CHAT')}>
             <Ionicons
               name="ios-chatbubbles"
