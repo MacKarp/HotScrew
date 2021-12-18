@@ -8,11 +8,11 @@ enum Type {
 
 type Match @model @auth(rules: [{allow: public}]) {
   id: ID!
-  User1ID: String!
-  User2ID: String
+  User1ID: ID!
+  User2ID: ID
   isMatch: Boolean!
-  Users1: [User] @hasMany(indexName: "byMatch", fields: ["id"])
-  Users2: [User] @hasMany(indexName: "byMatch", fields: ["id"])
+  User1: User @hasOne(fields: ["User1ID"])
+  User2: User @hasOne(fields: ["User2ID"])
 }
 
 type User @model @auth(rules: [{allow: public}]) {
@@ -21,7 +21,6 @@ type User @model @auth(rules: [{allow: public}]) {
   bio: String!
   image: String
   sub: String!
-  matchID: ID @index(name: "byMatch")
   type: Type
   lookingFor: Type
 }

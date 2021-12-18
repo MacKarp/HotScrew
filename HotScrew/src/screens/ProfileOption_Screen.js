@@ -34,7 +34,6 @@ const ProfileOptionScreen = () => {
         ? PERMISSIONS.IOS.PHOTO_LIBRARY
         : PERMISSIONS.ANDROID.CAMERA;
     request(perm).then(status => {
-      console.log(status);
     });
   }, []);
 
@@ -126,17 +125,13 @@ const ProfileOptionScreen = () => {
   };
 
   const pickImage = () => {
-    console.log('pickImage');
     launchImageLibrary(
       {mediaType: 'mixed'},
       ({didCancel, errorCode, errorMessage, assets}) => {
         if (didCancel || errorCode) {
           console.warn('canceled or error');
-          console.log(errorMessage);
           return;
         }
-        console.log('assets[0].uri');
-        console.log(assets[0].uri);
         setNewImageLocalUri(assets[0].uri);
       },
     );
