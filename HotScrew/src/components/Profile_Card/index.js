@@ -8,9 +8,17 @@ const Card = props => {
   const [imageUrl, setImageUrl] = useState(image);
 
   useEffect(() => {
+    let isMounted = true;
     if (!image?.startsWith('http')) {
-      Storage.get(image).then(setImageUrl);
+      Storage.get(image).then(data => {
+        if (isMounted) {
+          setImageUrl(data);
+        }
+      });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [image]);
 
   return (
