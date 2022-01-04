@@ -7,29 +7,42 @@ const LikingMeScreen = () => {
   const [matches, setMatches] = useState([]);
   const [me, setMe] = useState(null);
 
-  const getCurrentUser = async () => {
-    const user = await Auth.currentAuthenticatedUser();
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      let isMounted = true;
+      const user = await Auth.currentAuthenticatedUser();
 
-    const dbUsers = await DataStore.query(User, u =>
-      u.sub('eq', user.attributes.sub),
-    );
-    if (!dbUsers || dbUsers.length === 0) {
-      return;
-    }
-    setMe(dbUsers[0]);
-  };
-
-  useEffect(() => getCurrentUser(), []);
+      const dbUsers = await DataStore.query(User, u =>
+        u.sub('eq', user.attributes.sub),
+      );
+      if (!dbUsers || dbUsers.length === 0) {
+        return;
+      }
+      if (isMounted) {
+        setMe(dbUsers[0]);
+      }
+      return () => {
+        isMounted = false;
+      };
+    };
+    getCurrentUser();
+  }, []);
 
   useEffect(() => {
     if (!me) {
       return;
     }
     const fetchMatches = async () => {
+      let isMounted = true;
       const result = await DataStore.query(Match, m =>
         m.isMatch('eq', false).User2ID('eq', me.id),
       );
-      setMatches(result);
+      if (isMounted) {
+        setMatches(result);
+      }
+      return () => {
+        isMounted = false;
+      };
     };
     fetchMatches();
   }, [me]);

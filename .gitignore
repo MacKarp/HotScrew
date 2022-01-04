@@ -1,3 +1,7 @@
 /.vscode/*
 /HotScrew/debug.log
 /HotScrew/.vscode/*
+/Documentation/Dokumentacja.aux
+/Documentation/Dokumentacja.log
+/Documentation/Dokumentacja.out
+/Documentation/Dokumentacja.synctex.gz

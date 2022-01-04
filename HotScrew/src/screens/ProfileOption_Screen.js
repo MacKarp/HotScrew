@@ -33,12 +33,12 @@ const ProfileOptionScreen = () => {
       Platform.OS === 'ios'
         ? PERMISSIONS.IOS.PHOTO_LIBRARY
         : PERMISSIONS.ANDROID.CAMERA;
-    request(perm).then(status => {
-    });
+    request(perm).then(status => {});
   }, []);
 
   useEffect(() => {
     const getCurrentUser = async () => {
+      let isMounted = true;
       const authUser = await Auth.currentAuthenticatedUser();
 
       const dbUsers = await DataStore.query(User, u =>
@@ -49,12 +49,17 @@ const ProfileOptionScreen = () => {
         return;
       }
       const dbUser = dbUsers[0];
-      setUser(dbUser);
+      if (isMounted) {
+        setUser(dbUser);
 
-      setName(dbUser.name);
-      setBio(dbUser.bio);
-      setType(dbUser.type);
-      setLookingFor(dbUser.lookingFor);
+        setName(dbUser.name);
+        setBio(dbUser.bio);
+        setType(dbUser.type);
+        setLookingFor(dbUser.lookingFor);
+      }
+      return () => {
+        isMounted = false;
+      };
     };
     getCurrentUser();
   }, []);

@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {DataStore, Auth} from 'aws-amplify';
-import {User, Match} from '../models';
+import {User, Match, ChatRoom} from '../models';
 
 import Card from '../components/Profile_Card';
 import AnimatedStack from '../components/Animated_Stack';
@@ -19,6 +18,7 @@ const HomeScreen = ({isUserLoading}) => {
 
   useEffect(() => {
     const getCurrentUser = async () => {
+      let isMounted = true;
       const user = await Auth.currentAuthenticatedUser();
 
       const dbUsers = await DataStore.query(User, u =>
@@ -27,7 +27,12 @@ const HomeScreen = ({isUserLoading}) => {
       if (!dbUsers || dbUsers.length === 0) {
         return;
       }
-      setMe(dbUsers[0]);
+      if (isMounted) {
+        setMe(dbUsers[0]);
+      }
+      return () => {
+        isMounted = false;
+      };
     };
     getCurrentUser();
   }, [isUserLoading]);
@@ -37,16 +42,22 @@ const HomeScreen = ({isUserLoading}) => {
       return;
     }
     const fetchMatches = async () => {
+      let isMounted = true;
       const result = await DataStore.query(Match, m =>
         m
           .isMatch('eq', true)
           .or(m1 => m1.User1ID('eq', me.id).User2ID('eq', me.id)),
       );
-      setMatchesIds(
-        result.map(match =>
-          match.User1ID === me.id ? match.User2ID : match.User1ID,
-        ),
-      );
+      if (isMounted) {
+        setMatchesIds(
+          result.map(match =>
+            match.User1ID === me.id ? match.User2ID : match.User1ID,
+          ),
+        );
+      }
+      return () => {
+        isMounted = false;
+      };
     };
     fetchMatches();
   }, [me]);
@@ -56,13 +67,18 @@ const HomeScreen = ({isUserLoading}) => {
       return;
     }
     const fetchUsers = async () => {
+      let isMounted = true;
       let fetchedUsers = await DataStore.query(User, user =>
         user.type('eq', me.lookingFor),
       );
 
       fetchedUsers = fetchedUsers.filter(u => !matchesIds.includes(u.id));
-
-      setUsers(fetchedUsers);
+      if (isMounted) {
+        setUsers(fetchedUsers);
+      }
+      return () => {
+        isMounted = false;
+      };
     };
     fetchUsers();
   }, [isUserLoading, me, matchesIds]);
@@ -94,8 +110,19 @@ const HomeScreen = ({isUserLoading}) => {
 
     if (hisMatches.length > 0) {
       const hisMatch = hisMatches[0];
+      const newChatRoomData = {
+        newMessages: 0,
+        Admin: me,
+        ChatRoomUser1: me.id,
+        ChatRoomUser2: currentUser.id,
+      };
+      const newChatRoom = await DataStore.save(new ChatRoom(newChatRoomData));
+
       DataStore.save(
-        Match.copyOf(hisMatch, updated => (updated.isMatch = true)),
+        Match.copyOf(hisMatch, updated => {
+          updated.isMatch = true;
+          updated.ChatRoom = newChatRoom;
+        }),
       );
       return;
     }
