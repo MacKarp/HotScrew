@@ -2,7 +2,7 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "testAuthIdentityPool",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "hotscrbf419e92",
     "userPoolName": "HotScrew",
     "autoVerifiedAttributes": [
@@ -58,6 +58,13 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "hostedUI": false
+    "hostedUI": true,
+    "hostedUIDomainName": "vrvh94hgg3eo",
+    "authProvidersUserPool": [
+      "Facebook",
+      "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/oauth2/idpresponse\",\"http://localhost:3000\",\"https://localhost:3000\"],\"LogoutURLs\":[\"http://localhost:3000/oauth2/idpresponse\",\"http://localhost:3000\",\"https://localhost:3000\"]}"
   }
 }
