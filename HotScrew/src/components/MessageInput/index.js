@@ -79,6 +79,7 @@ const MessageInput = props => {
       chatroomID: chatRoom.id,
       replyToMessageID: messageReplyTo?.id,
     });
+    DataStore.save(newMessage);
     updateLastMessage(newMessage);
     resetFields();
   };
